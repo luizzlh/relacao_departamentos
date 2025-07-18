@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="<http://www.thymeleaf.org>">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+          crossorigin="anonymous">
+    <title>Relação Departamentos</title>
+</head>
+<body>
+    <header class="container">
+
+        <div class="d-flex justify-content-center py-3">
+            <h1 class="display-4 fw-bold text-body-emphasis">Grupo Ramiro Campelo</h1>
+        </div>
+
+    </header>
+
+    <main class="container">
+
+        <div class="d-flex justify-content-center py-3">
+            <h2 class="display-4 fw-bold text-body-emphasis">Relação de Problemas X Departamentos</h2>
+        </div>
+
+        <div>
+            <form th:action="@{/}" method="get">
+                <input type="text" name="nome" placeholder="Digite a situação" th:value="${nome}" class="form-control">
+                <button type="submit" class="btn btn-primary w-100 py-2">Filtrar</button>
+            </form>
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Situação</th>
+                <th>Departamento</th>
+            </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="item : ${itens}">
+                    <td th:text="${item.nome}"></td>
+                    <td th:text="${item.departamento}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous">
+</script>
+</body>
+</html>
