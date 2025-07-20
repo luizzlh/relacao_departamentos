@@ -1,12 +1,12 @@
+# Etapa de build
 FROM maven:3-eclipse-temurin-17 AS build
 WORKDIR /app
-COPY mvnw .mvn/ pom.xml ./
-RUN chmod +x mvnw
-COPY src src
+COPY . .
 RUN ./mvnw clean package -DskipTests
 
-FROM eclipse-temurin:17-jdk-slim
+# Etapa de runtime com imagem válida
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
