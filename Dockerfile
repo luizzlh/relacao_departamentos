@@ -1,12 +1,12 @@
-# Usa imagem com JDK e Maven
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+FROM maven:3-eclipse-temurin-17 AS build
 WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
+COPY mvnw .mvn/ pom.xml ./
+RUN chmod +x mvnw
+COPY src src
+RUN ./mvnw clean package -DskipTests
 
-# Cria imagem final somente com o jar
-FROM eclipse-temurin:21-jdk-alpine
+FROM eclipse-temurin:17-jdk-slim
 WORKDIR /app
-COPY --from=build /app/target/aplication-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
