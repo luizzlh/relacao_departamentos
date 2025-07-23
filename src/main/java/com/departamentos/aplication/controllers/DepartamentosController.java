@@ -10,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,16 +24,19 @@ public class DepartamentosController {
     private ItemRepository itemRepository;
 
     @PostMapping("/cadastrar")
-    public String cadastrar(@Valid @ModelAttribute Item item, BindingResult result){
+    public String cadastrar(@Valid @ModelAttribute Item item,
+                            BindingResult result,
+                            RedirectAttributes redirectAttributes){
 
         if(result.hasErrors()){
             return "admin";
         }
 
-        String nome = itemRepository.findByNome(item.getNome());
+        Optional<Item> itemExistente = itemRepository.findByNomeIgnoreCase(item.getNome());
 
-        if(item.getNome().trim().replace(" ", "") != nome.trim().replace(" ", "")){
-            itemRepository.save(item);
+        if (itemExistente.isPresent()) {
+            redirectAttributes.addFlashAttribute("mensagemErro",
+                    "Já existe um item com esse nome.");
             return "redirect:/admincadastro";
         }
 
