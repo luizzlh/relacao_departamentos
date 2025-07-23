@@ -3,6 +3,7 @@ package com.departamentos.aplication.controllers;
 import com.departamentos.aplication.models.Item;
 import com.departamentos.aplication.repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class DepartamentosController {
 
     @GetMapping("/admincadastro")
     public String admin(Model model){
-        List<Item> itens = itemRepository.findAll();
+        List<Item> itens = itemRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
 
         model.addAttribute("itens", itens);
         model.addAttribute("item", new Item());
