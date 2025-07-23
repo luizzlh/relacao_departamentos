@@ -2,10 +2,12 @@ package com.departamentos.aplication.controllers;
 
 import com.departamentos.aplication.models.Item;
 import com.departamentos.aplication.repositories.ItemRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,9 +21,21 @@ public class DepartamentosController {
     private ItemRepository itemRepository;
 
     @PostMapping("/cadastrar")
-    public String cadastrar(@ModelAttribute Item item){
-        itemRepository.save(item);
-        return "redirect:/admincadastro";
+    public String cadastrar(@Valid @ModelAttribute Item item, BindingResult result){
+
+        if(result.hasErrors()){
+            return "admin";
+        }
+
+        String nome = itemRepository.findByNome(item.getNome());
+
+        if(item.getNome().trim().replace(" ", "") != nome.trim().replace(" ", "")){
+            itemRepository.save(item);
+            return "redirect:/admincadastro";
+        }
+
+        return "admin";
+
     }
 
     @GetMapping("/")

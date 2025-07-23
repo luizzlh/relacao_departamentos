@@ -27,8 +27,11 @@
         <div class="d-flex justify-content-center py-3">
             <form th:action="@{/cadastrar}" th:object="${item}" method="post">
                 <input type="hidden" th:field="*{id}">
+
                 <label>Situação</label>
                 <input type="text" th:field="*{nome}">
+                <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span>
+
                 <label>Departamento</label>
                 <select name="departamento" id="departamento" th:field="*{departamento}">
                     <option value="Comercial">Comercial</option>
@@ -45,6 +48,7 @@
                     <option value="Crédito">Crédito</option>
                     <option value="Auditoria">Auditoria</option>
                 </select>
+                <span th:if="${#fields.hasErrors('departamento')}" th:errors="*{departamento}"></span>
                 <button type="submit" class="btn btn-primary rounded-pill px-3">Adicionar</button>
             </form>
         </div>
