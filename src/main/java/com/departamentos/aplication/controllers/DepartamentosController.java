@@ -29,7 +29,7 @@ public class DepartamentosController {
                             RedirectAttributes redirectAttributes){
 
         if(result.hasErrors()){
-            return "admin";
+            return "redirect:/admincadastro";
         }
 
         Optional<Item> itemExistente = itemRepository.findByNomeIgnoreCase(item.getNome());
@@ -40,7 +40,7 @@ public class DepartamentosController {
             return "redirect:/admincadastro";
         }
 
-        return "admin";
+        return "redirect:/admincadastro";
 
     }
 
