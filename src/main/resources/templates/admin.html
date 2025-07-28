@@ -8,96 +8,99 @@
 </head>
 <body>
 
-    <header class="container">
+<header class="container">
 
-        <div class="d-flex justify-content-center py-3">
-            <h1>Grupo Ramiro Campelo</h1>
+    <div class="d-flex justify-content-center py-3">
+        <h1>Grupo Ramiro Campelo</h1>
+    </div>
+
+</header>
+
+<main class="container">
+
+    <div class="d-flex justify-content-center py-3">
+        <h2 class="display-4 fw-bold text-body-emphasis">Cadastro de Itens</h2>
+    </div>
+
+    <a href="/" class="btn btn-outline-secondary d-inline-flex align-items-center">Lista de Itens</a>
+
+    <div class="d-flex justify-content-center py-3">
+        <div th:if="${erro}" class="alert alert-danger">
+            <p th:text="${erro}"></p>
         </div>
+        <form th:action="@{/cadastrar}" th:object="${item}" method="post">
+            <input type="hidden" th:field="*{id}">
 
-    </header>
+            <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="alert alert-danger"></span>
+            <label>Situação</label>
+            <input type="text" th:field="*{nome}">
 
-    <main class="container">
+            <span th:if="${#fields.hasErrors('departamento')}" th:errors="*{departamento}"></span>
+            <label>Departamento</label>
+            <select name="departamento" id="departamento" th:field="*{departamento}">
+                <option value="Comercial">Comercial</option>
+                <option value="Serviços">Serviços</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Marketplace">Marketplace</option>
+                <option value="Operações">Operações</option>
+                <option value="Compras">Compras</option>
+                <option value="RH">RH</option>
+                <option value="Financeiro">Financeiro</option>
+                <option value="Controladoria">Controladoria</option>
+                <option value="Fiscal">Fiscal</option>
+                <option value="DTI">DTI</option>
+                <option value="Crédito">Crédito</option>
+                <option value="Auditoria">Auditoria</option>
+            </select>
+            <button type="submit" class="btn btn-primary rounded-pill px-3">Adicionar</button>
+        </form>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Situação</th>
+            <th>Departamento</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
 
-        <div class="d-flex justify-content-center py-3">
-            <h2 class="display-4 fw-bold text-body-emphasis">Cadastro de Itens</h2>
-        </div>
-
-        <a href="/" class="btn btn-outline-secondary d-inline-flex align-items-center">Lista de Itens</a>
-        
-        <div class="d-flex justify-content-center py-3">
-            <form th:action="@{/cadastrar}" th:object="${item}" method="post">
-                <input type="hidden" th:field="*{id}">
-
-                <label>Situação</label>
-                <input type="text" th:field="*{nome}">
-                <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span>
-
-                <label>Departamento</label>
-                <select name="departamento" id="departamento" th:field="*{departamento}">
-                    <option value="Comercial">Comercial</option>
-                    <option value="Serviços">Serviços</option>
-                    <option value="Marketing">Marketing</option>
-                    <option value="Marketplace">Marketplace</option>
-                    <option value="Operações">Operações</option>
-                    <option value="Compras">Compras</option>
-                    <option value="RH">RH</option>
-                    <option value="Financeiro">Financeiro</option>
-                    <option value="Controladoria">Controladoria</option>
-                    <option value="Fiscal">Fiscal</option>
-                    <option value="DTI">DTI</option>
-                    <option value="Crédito">Crédito</option>
-                    <option value="Auditoria">Auditoria</option>
-                </select>
-                <span th:if="${#fields.hasErrors('departamento')}" th:errors="*{departamento}"></span>
-                <button type="submit" class="btn btn-primary rounded-pill px-3">Adicionar</button>
-            </form>
-        </div>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Situação</th>
-                <th>Departamento</th>
-                <th>Ações</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr th:each="item : ${itens}">
-                <td th:text="${item.id}"></td>
-                <td th:text="${item.nome}"></td>
-                <td th:text="${item.departamento}"></td>
-                <td>
-                    <a th:href="@{'/editar/' + ${item.id}}" class="btn btn-outline-secondary d-inline-flex align-items-center">
-                        Editar
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                             fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5
+        <tbody>
+        <tr th:each="item : ${itens}">
+            <td th:text="${item.id}"></td>
+            <td th:text="${item.nome}"></td>
+            <td th:text="${item.departamento}"></td>
+            <td>
+                <a th:href="@{'/editar/' + ${item.id}}" class="btn btn-outline-secondary d-inline-flex align-items-center">
+                    Editar
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                         fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5
                             2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5
                             1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1
                             .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5
                             12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                        </svg>
-                    </a> |
-                    <a th:href="@{'/deletar/' + ${item.id}}" onclick="return confirm('Tem certeza que deseja excluir?');"
-                       class="btn btn-danger rounded-pill px-3">
-                        Excluir
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1
+                    </svg>
+                </a> |
+                <a th:href="@{'/deletar/' + ${item.id}}" onclick="return confirm('Tem certeza que deseja excluir?');"
+                   class="btn btn-danger rounded-pill px-3">
+                    Excluir
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1
                             .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0
+                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0
                             1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118
                             4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                        </svg>
-                    </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                    </svg>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
-    </main>
+</main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
 </body>

@@ -1,48 +1,29 @@
 package com.departamentos.aplication.controllers;
 
-import com.departamentos.aplication.models.Item;
-import com.departamentos.aplication.repositories.ItemRepository;
-import jakarta.validation.Valid;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Optional;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.departamentos.aplication.models.*;
+import com.departamentos.aplication.repositories.ItemRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.validation.Valid;
 
 @Controller
 public class DepartamentosController {
-    private ArrayList<Item> problema = new ArrayList<>();
 
     @Autowired
     private ItemRepository itemRepository;
-
-    @PostMapping("/cadastrar")
-    public String cadastrar(@Valid @ModelAttribute Item item,
-                            BindingResult result,
-                            RedirectAttributes redirectAttributes){
-
-        if(result.hasErrors()){
-            return "redirect:/admincadastro";
-        }
-
-        Optional<Item> itemExistente = itemRepository.findByNomeIgnoreCase(item.getNome());
-
-        if (itemExistente.isPresent()) {
-            redirectAttributes.addFlashAttribute("mensagemErro",
-                    "Já existe um item com esse nome.");
-            return "admin";
-        }
-
-        return "redirect:/admincadastro";
-
-    }
 
     @GetMapping("/")
     public String lista(@RequestParam(required = false)String nome, Model model){
@@ -59,13 +40,24 @@ public class DepartamentosController {
         return "departamentos";
     }
 
-    @GetMapping("/admincadastro")
-    public String admin(Model model){
-        List<Item> itens = itemRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    @PostMapping("/cadastrar")
+    public String cadastrar(@Valid @ModelAttribute Item item,
+                            BindingResult result,
+                            Model model) {
 
-        model.addAttribute("itens", itens);
-        model.addAttribute("item", new Item());
-        return "admin";
+        if (result.hasErrors()) {
+            return "admin";
+        }
+
+        Optional<Item> itemExistente = itemRepository.findByNomeIgnoreCase(item.getNome());
+
+        if (itemExistente.isPresent()) {
+            model.addAttribute("erro", "Item já cadastrado!");
+            return "admin";
+        }
+
+        itemRepository.save(item);
+        return "redirect:/admincadastro";
     }
 
     @GetMapping("/editar/{id}")
@@ -82,5 +74,14 @@ public class DepartamentosController {
     public String deletarItem(@PathVariable int id){
         itemRepository.deleteById(id);
         return "redirect:/admincadastro";
+    }
+
+    @GetMapping("/admincadastro")
+    public String admin(Model model){
+        List<Item> itens = itemRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+
+        model.addAttribute("itens", itens);
+        model.addAttribute("item", new Item());
+        return "admin";
     }
 }
