@@ -37,7 +37,7 @@ public class DepartamentosController {
         if (itemExistente.isPresent()) {
             redirectAttributes.addFlashAttribute("mensagemErro",
                     "Já existe um item com esse nome.");
-            return "redirect:/admincadastro";
+            return "admin";
         }
 
         return "redirect:/admincadastro";
